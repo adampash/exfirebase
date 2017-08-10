@@ -8,6 +8,10 @@ defmodule ExFirebase.HTTP do
     send_to_server(url, &HTTPotion.get/1, nil, options)
   end
 
+  def get(url) do
+    send_to_server(url, &HTTPotion.get/1)
+  end
+
   @doc "Sends HTTP/post request"
   def post(url, data) do
     send_to_server(url, &HTTPotion.post/2, data)
