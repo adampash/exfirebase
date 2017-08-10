@@ -117,7 +117,7 @@ defmodule ExFirebase do
     method.(get_url(path)) |> parse_json
   end
   
-   def send_request(path, [query: query]) do
+   def send_request(path, method, [query: query]) do
     method.(get_url(path), URI.encode_query(query)) |> parse_json
   end
 
