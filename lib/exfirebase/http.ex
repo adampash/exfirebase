@@ -5,7 +5,7 @@ defmodule ExFirebase.HTTP do
 
   @doc "Sends HTTP/get request"
   def get(url, options) do
-    send_to_server(url, &HTTPotion.get/1, nil, options)
+    send_to_server(url, &HTTPotion.get/2, nil, options)
   end
 
   def get(url) do
@@ -36,7 +36,9 @@ defmodule ExFirebase.HTTP do
     HTTPotion.start
 
     response =
-      if data == nil do
+      if data == nil && options == nil do
+        method.(url)
+      else if options != nil do
         method.(url, [options: options])
       else
         method.(url, [body: data])
