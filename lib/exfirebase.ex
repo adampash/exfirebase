@@ -46,6 +46,10 @@ defmodule ExFirebase do
     ExFirebase.get("")
   end
 
+  def get(path, options) do
+    send_request(path, &HTTP.get/1, options)
+  end
+
   def get(path) do
     send_request(path, &HTTP.get/1)
   end
@@ -112,6 +116,11 @@ defmodule ExFirebase do
   def send_request(path, method) do
     method.(get_url(path)) |> parse_json
   end
+  
+   def send_request(path, [query: query]) do
+    method.(get_url(path), URI.encode_query(query)) |> parse_json
+  end
+
 
   @doc """
   Send the request to server and returns response in tuple/list format
