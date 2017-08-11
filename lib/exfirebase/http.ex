@@ -36,12 +36,13 @@ defmodule ExFirebase.HTTP do
     HTTPotion.start
 
     response =
-      if data == nil && options == nil do
-        method.(url)
-      else if options != nil do
-        method.(url, [options: options])
-      else
-        method.(url, [body: data])
+      cond do
+        data == nil && options == nil ->
+          method.(url)
+        options != nil ->
+          method.(url, [options: options])
+        true ->
+          method.(url, [body: data])
       end
 
     response.body
