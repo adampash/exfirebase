@@ -4,12 +4,16 @@ defmodule ExFirebase.HTTP do
   """
 
   @doc "Sends HTTP/get request"
-  def get(url, options) do
-    send_to_server(url, &HTTPotion.get/2, nil, options)
+  def get(url, query) do
+    send_to_server(url <> "&#{build_query(query)}", &HTTPotion.get/1)
   end
 
   def get(url) do
     send_to_server(url, &HTTPotion.get/1)
+  end
+
+  def get(url, query) do
+    send_to_server(url <> "&#{build_query(query)}", &HTTPotion.get/2, options)
   end
 
   @doc "Sends HTTP/post request"
@@ -32,17 +36,17 @@ defmodule ExFirebase.HTTP do
     send_to_server(url, &HTTPotion.delete/1)
   end
 
-  defp send_to_server(url, method, data \\ nil, options \\ nil) do
+  def build_query(query) do
+    URI.encode_query(query)
+  end
+  defp send_to_server(url, method, data \\ nil) do
     HTTPotion.start
 
     response =
-      cond do
-        data == nil && options == nil ->
-          method.(url)
-        options != nil ->
-          method.(url, [options: options])
-        true ->
-          method.(url, [body: data])
+      if data == nil do
+        method.(url)
+      else
+        method.(url, [body: data])
       end
 
     response.body
