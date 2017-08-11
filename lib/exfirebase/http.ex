@@ -12,10 +12,6 @@ defmodule ExFirebase.HTTP do
     send_to_server(url, &HTTPotion.get/1)
   end
 
-  def get(url, query) do
-    send_to_server(url <> "&#{build_query(query)}", &HTTPotion.get/2, options)
-  end
-
   @doc "Sends HTTP/post request"
   def post(url, data) do
     send_to_server(url, &HTTPotion.post/2, data)
