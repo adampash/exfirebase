@@ -38,8 +38,6 @@ defmodule ExFirebase.HTTP do
   defp send_to_server(url, method, data \\ nil) do
     HTTPotion.start
 
-    IO.inspect(url)
-
     response =
       if data == nil do
         method.(url)

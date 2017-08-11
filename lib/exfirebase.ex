@@ -3,8 +3,8 @@ defmodule ExFirebase do
   Provides interfaces for Firebase API calls.
   Also, the following modules provides object-based operation interface.
 
-    - ExFirebase.Records : Helper for Elixir's record-based operations
-    - ExFirebase.Objects : Helper for getting/posting objects
+  - ExFirebase.Records : Helper for Elixir's record-based operations
+  - ExFirebase.Objects : Helper for getting/posting objects
   """
   alias ExFirebase.HTTP
   require Record
@@ -46,8 +46,8 @@ defmodule ExFirebase do
     ExFirebase.get("")
   end
 
-  def get(path, options) do
-    send_request(path, &HTTP.get/1, options)
+  def get(path, query) do
+    send_request(path, &HTTP.get/2, query)
   end
 
   def get(path) do
@@ -104,7 +104,7 @@ defmodule ExFirebase do
   Get objects on the specified path in raw json format.
   Options can be used to provide additional parameter for requqest.
 
-    - options[pretty: true] : Specify 'print=pretty' for human readable format.
+  - options[pretty: true] : Specify 'print=pretty' for human readable format.
   """
   def get_raw_json(path \\ "", options \\ nil) do
     HTTP.get(get_url(path, options))
@@ -116,9 +116,9 @@ defmodule ExFirebase do
   def send_request(path, method) do
     method.(get_url(path)) |> parse_json
   end
-  
-   def send_request(path, method, [query: query]) do
-    method.(get_url(path), URI.encode_query(query)) |> parse_json
+
+  def send_request(path, method, query) do
+    method.(get_url(path), query) |> parse_json
   end
 
 
@@ -132,7 +132,7 @@ defmodule ExFirebase do
   defp generate_url(url, token, options) do
     params =
       (parse_option_param(options) ++ parse_token_param(token))
-        |> Enum.join("&")
+      |> Enum.join("&")
 
     if params == "" do
       url
